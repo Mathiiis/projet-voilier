@@ -56,7 +56,8 @@ int main ( void ) {
 	RCC->APB1ENR |= RCC_APB1ENR_USART2EN ;
 	
 	/// USART
-	
+	// Pour XBEE 
+	// PA2,3 VERT
 	InitGPIO(GPIOA,2,OUTPUTALTERNATEPUSHPULL) ;
 	InitGPIO(GPIOA,3,INPUTFLOATING) ;
 	
@@ -72,7 +73,8 @@ int main ( void ) {
 	
 	
 	/// ADC
-	
+	// Pour Alim
+	// PA0 ROUGE
 	InitGPIO(GPIOA,0,0) ; // En input, analog input
 	
 	MyADC_Init(ADC1,8) ;
@@ -85,8 +87,27 @@ int main ( void ) {
 	MyTimer_Base_Init(TIM2,35999,999) ; // Initialise le fréquence de l'horloge a 0,5Hz
 	MyTimer_ActiveIT(TIM2,3,Toggle) ; //Active l'interruption et la rend acceptable pour le processeur
 	
+	// Pour Girouette -> Codeur Incrémental
+	// 1 Timer -> 2 Channel (PB14,15) + 1 GPIO PB13 NOIR
+	
+	
+	
+	
+	
 	/// Timer avec PWM
 	
+	// Plateau PWM PA6 BLEU
+	// Plateau Dir. -> Bit de Sens PA5 BLEU
+ 	//On va utiliser de nouveaux timers et GPIO pour avoir faire du PWM mode
+	
+	InitGPIO(GPIOA,6,10) ;// A mettre en alternate output push pull (sortie plus dépendante de ODR) et voir quelle pin est map avec le TIM3_Channel qui est disponible pour le PWM mode
+	MyTimer_Base_Init(TIM3,11999,119) ;// Faire clignoter a 50Hz 
+	MyTimer_PWM(TIM3,1) ; // Init le PWM et map le tout
+	
+	int RC = 60 ;
+	MyTimer_PWM_RC(TIM3,RC) ;
+	
+	// Servo PWM PA7 JAUNE
 	//On va utiliser de nouveaux timers et GPIO pour avoir faire du PWM mode
 	
 	InitGPIO(GPIOA,6,10) ;// A mettre en alternate output push pull (sortie plus dépendante de ODR) et voir quelle pin est map avec le TIM3_Channel qui est disponible pour le PWM mode
