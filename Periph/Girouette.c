@@ -7,6 +7,9 @@
 
 
 void Girouette_Init() {
+	
+	RCC->APB2ENR |= RCC_APB2ENR_TIM1EN ;
+	RCC->APB2ENR |= RCC_APB2ENR_IOPBEN ;
 
 	InitGPIO(GPIOB,13,INPUTFLOATING) ;
 	InitGPIO(GPIOB,14,INPUTFLOATING) ;
@@ -31,8 +34,11 @@ void Girouette_Init() {
 	TIM1->CCMR1 |= 0x00<<12 ;
 	
 	TIM1->SMCR |= 0x011 ;
+	
+	while (!LireBroche(GPIOB,15)) {} //Attends le disque IDX pour mettre l'angle a 0
+	MyTimer_Base_Start(TIM1) ;
 }
 
 int GirouetteGetAngle() {
-		return TIM1->CNT;
+		return (TIM1->CNT)/4;
 }
