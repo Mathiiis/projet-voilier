@@ -3,6 +3,7 @@
 #include "../Driver/MyTimer.h"
 #include "../Driver/MyADC.h"
 #include "../Driver/MyUSART.h"
+#include "../Periph/Girouette.h"
 
 /////////////////////////////////
 //  fonction 'pas top top'     //
@@ -44,7 +45,9 @@ void send() {
 	
 }
 
+
 int main ( void ) {
+	
 	
 	/*
 	/// RCC => Allumer les périph 
@@ -87,12 +90,14 @@ int main ( void ) {
 	MyTimer_Base_Init(TIM2,35999,999) ; // Initialise le fréquence de l'horloge a 0,5Hz
 	MyTimer_ActiveIT(TIM2,3,Toggle) ; //Active l'interruption et la rend acceptable pour le processeur
 	
+	*/
+	
 	// Pour Girouette -> Codeur Incrémental
-	// 1 Timer -> 2 Channel (PB14,15) + 1 GPIO PB13 NOIR
+	// 1 Timer -> 2 Channel (PB13,14) + 1 GPIO PB15 NOIR
 	
+	Girouette_Init() ;
 	
-	
-	
+	/*
 	
 	/// Timer avec PWM
 	
@@ -107,7 +112,7 @@ int main ( void ) {
 	int RC = 60 ;
 	MyTimer_PWM_RC(TIM3,RC) ;
 	
-	// Servo PWM PA7 JAUNE
+	// Servo PWM PA1 JAUNE
 	//On va utiliser de nouveaux timers et GPIO pour avoir faire du PWM mode
 	
 	InitGPIO(GPIOA,6,10) ;// A mettre en alternate output push pull (sortie plus dépendante de ODR) et voir quelle pin est map avec le TIM3_Channel qui est disponible pour le PWM mode

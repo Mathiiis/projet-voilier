@@ -21,25 +21,26 @@ Target DLL:      UL2CM3.DLL V1.164.14.0
 Dialog DLL:      TARMSTM.DLL V1.67.1.0
  
 <h2>Project:</h2>
-U:\Windows\Bureau\Travail\4A\Sys_Embarque\Projet\Projet\Projet.uvprojx
-Project File Date:  11/12/2025
+U:\Windows\Bureau\Travail\4A\Sys_Embarque\Projet\projet-voilier\Projet.uvprojx
+Project File Date:  11/26/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.23', folder: 'C:\Keil\542a\ARM\ARMCLANG\Bin'
 Rebuild target 'Simulation'
 assembling startup_stm32f10x_md.s...
-compiling MyADC.c...
-compiling MyTimer.c...
-compiling Pilote_GPIO.c...
 Driver/MyUSART.c(17): warning: unused parameter 'USART' [-Wunused-parameter]
    17 | void MyUSART_ActiveIT(USART_TypeDef * USART) {
       |                                       ^
 1 warning generated.
 compiling MyUSART.c...
-compiling system_stm32f10x.c...
+compiling Pilote_GPIO.c...
+compiling MyTimer.c...
 compiling principal.c...
+compiling Girouette.c...
+compiling MyADC.c...
+compiling system_stm32f10x.c...
 linking...
-Program Size: Code=2448 RO-data=252 RW-data=0 ZI-data=1648  
+Program Size: Code=1188 RO-data=252 RW-data=0 ZI-data=1648  
 ".\Objects\Projet3FISA.axf" - 0 Error(s), 1 Warning(s).
 
 <h2>Software Packages used:</h2>
@@ -68,10 +69,10 @@ Package Vendor: Keil
 
    * Component: Keil::Device:Startup@1.0.0
       Source file:   Device/Source/ARM/startup_stm32f10x_md.s
-      Source file:   Device/Source/system_stm32f10x.c
       Include file:  RTE_Driver/Config/RTE_Device.h
       Source file:   Device/Source/ARM/STM32F1xx_OPT.s
-Build Time Elapsed:  00:00:02
+      Source file:   Device/Source/system_stm32f10x.c
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

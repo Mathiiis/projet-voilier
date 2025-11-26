@@ -417,6 +417,16 @@
           </Files>
         </Group>
         <Group>
+          <GroupName>Periph</GroupName>
+          <Files>
+            <File>
+              <FileName>Girouette.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Girouette.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
           <GroupName>::CMSIS</GroupName>
         </Group>
         <Group>
@@ -831,6 +841,16 @@
               <FileName>MyUSART.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Driver\MyUSART.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Periph</GroupName>
+          <Files>
+            <File>
+              <FileName>Girouette.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Girouette.c</FilePath>
             </File>
           </Files>
         </Group>
