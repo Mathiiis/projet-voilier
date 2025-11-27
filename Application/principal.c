@@ -1,9 +1,12 @@
 #include "stm32f10x.h"
-#include "../Driver/Pilote_GPIO.h"
-#include "../Driver/MyTimer.h"
-#include "../Driver/MyADC.h"
-#include "../Driver/MyUSART.h"
-#include "../Periph/Girouette.h"
+#include "GPIO.h"
+#include "MyTimer.h"
+#include "ADC.h"
+#include "USART.h"
+#include "Servo.h"
+
+
+int watched_value;
 
 /////////////////////////////////
 //  fonction 'pas top top'     //
@@ -23,7 +26,6 @@ void Toggle() {
 			SetBroche(GPIOC,8);
 		}
 }
-
 
 /// Timer
 void scrutatingUIF() {
@@ -45,85 +47,82 @@ void send() {
 	
 }
 
+void Emission(void)
+{
+	//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au dï¿½marrage c est pour l adc
+	USART2->DR= 'a';
+}
 
-int main ( void ) {
-	
-	
-	/*
-	/// RCC => Allumer les périph 
-	RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN | RCC_APB2ENR_IOPDEN ;
-	RCC->APB1ENR |= RCC_APB1ENR_TIM2EN ; // Allume le Timer 2
-	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN ;
-	RCC->APB2ENR |= RCC_APB2ENR_TIM1EN ;
-	RCC->APB2ENR |= RCC_APB2ENR_ADC1EN ;
-	RCC->APB1ENR |= RCC_APB1ENR_USART2EN ;
-	
-	/// USART
-	// Pour XBEE 
-	// PA2,3 VERT
-	InitGPIO(GPIOA,2,OUTPUTALTERNATEPUSHPULL) ;
-	InitGPIO(GPIOA,3,INPUTFLOATING) ;
-	
-	MyTimer_Base_Init(TIM2,35999,199) ; // Formule (1/f_clk_rcc[=souvent 72 MHz]) * (ARR+1) * (PSC+1) = f_horloge_voulue
-	MyTimer_ActiveIT(TIM2,3,send) ;
-	
-	MyUSART_Init(USART2);
-	MyUSART_SetBaudRate(USART2,9600) ;
-	MyUSART_ActiveIT(USART2) ;
-	
-	MyTimer_Base_Start(TIM2) ; // Allume le Timer a la fin pour faire des send apres avoir config l'USART
-	
-	
-	
-	/// ADC
-	// Pour Alim
-	// PA0 ROUGE
-	InitGPIO(GPIOA,0,0) ; // En input, analog input
-	
-	MyADC_Init(ADC1,8) ;
-	
-	MyTimer_Base_Init(TIM2,35999,199) ; 
-	MyTimer_ActiveIT(TIM2,3,MyADC_StartConvert) ;
-	
-	
-	InitGPIO(GPIOC,8,2) ;
-	MyTimer_Base_Init(TIM2,35999,999) ; // Initialise le fréquence de l'horloge a 0,5Hz
-	MyTimer_ActiveIT(TIM2,3,Toggle) ; //Active l'interruption et la rend acceptable pour le processeur
-	
-	*/
-	
-	// Pour Girouette -> Codeur Incrémental
-	// 1 Timer -> 2 Channel (PB13,14) + 1 GPIO PB15 NOIR
+extern int valeur;
+
+
+char toto ;
+void USART2_IRQHandler(void)
+{
+	toto = USART2->DR ;
+}
+
+
+int main ( void )
+{
 	
 	Girouette_Init() ;
+
+	MyServoInit();
+	//RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
+  	/* MyTimer_Base_Init(TIM2, 4999, 14399);	
 	
-	/*
+
+	//InitTimer2();
+	//watched_value = TIM2->CNT;
+
 	
-	/// Timer avec PWM
+	//InitGPIO( GPIOA, 0, OUTPUTPUSHPULL );
+	//InitGPIO( GPIOC, 0, INPOUTFLOATING );
+
+	//MyADC1_Config_PA0();
+
+	InitGPIO(GPIOA, 2, OUTPUTPUSHPULL);
+	InitGPIO(GPIOA, 3, INPOUTFLOATING);
+
 	
-	// Plateau PWM PA6 BLEU
-	// Plateau Dir. -> Bit de Sens PA5 BLEU
- 	//On va utiliser de nouveaux timers et GPIO pour avoir faire du PWM mode
+  	MyTimer_ActiveIT(TIM2, 3, Emission);
 	
-	InitGPIO(GPIOA,6,10) ;// A mettre en alternate output push pull (sortie plus dépendante de ODR) et voir quelle pin est map avec le TIM3_Channel qui est disponible pour le PWM mode
-	MyTimer_Base_Init(TIM3,11999,119) ;// Faire clignoter a 50Hz 
-	MyTimer_PWM(TIM3,1) ; // Init le PWM et map le tout
+  
+	USART2_Init();
 	
-	int RC = 60 ;
-	MyTimer_PWM_RC(TIM3,RC) ;
+	TIM2->CR1 |= TIM_CR1_CEN;//faut pas publier cette ligne!!!!!!!
+*/
 	
-	// Servo PWM PA1 JAUNE
-	//On va utiliser de nouveaux timers et GPIO pour avoir faire du PWM mode
+	// Gï¿½nï¿½re une PWM ï¿½ 10 kHz avec 50 % de rapport cyclique sur PA6
+	// f_PWM = 72 MHz / ((PSC+1) * (ARR+1))
+	// Par ex : PSC = 71, ARR = 99 ? 10 kHz
+	// MyTimer_PWM_TIM3_PA6(4999, 14399, 0.2f);
 	
-	InitGPIO(GPIOA,6,10) ;// A mettre en alternate output push pull (sortie plus dépendante de ODR) et voir quelle pin est map avec le TIM3_Channel qui est disponible pour le PWM mode
-	MyTimer_Base_Init(TIM3,11999,119) ;// Faire clignoter a 50Hz 
-	MyTimer_PWM(TIM3,1) ; // Init le PWM et map le tout
-	
-	int RC = 60 ;
-	MyTimer_PWM_RC(TIM3,RC) ;
-	*/
-	
-	
-	while (1) {
+	while (1)
+	{
+		//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au dï¿½marrage
 	}
 }
+
+
+/*// CONFIGURATION MANUELLE DES BROCHES
+// 
+//  GPIOA pin 0 : push-pull output 2 MHz
+	GPIOA->CRL &= ~0xF;
+	GPIOA->CRL |= 0x2;
+
+	// GPIOC pin 0 : input pull-up
+	GPIOC->CRL &= ~0xF;
+	GPIOC->CRL |= 0x8;
+	GPIOC->ODR |= 1 << 0;  // pull-up
+	code pour push pull et pull up*/
+	
+	/*//foating et ...
+	GPIOA->CRL &= ~0xF; //pushpull
+	GPIOA->CRL |= 0x2;
+	
+	GPIOC->CRL &= ~0xF; //floating
+	GPIOC->CRL |= 0x4;
+	*/
+	
