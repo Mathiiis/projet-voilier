@@ -16,6 +16,7 @@ void Girouette_Init() {
 	InitGPIO(GPIOB,15,INPUTFLOATING) ;
 	
 	MyTimer_Base_Init(TIM1,1440,0) ;
+	
 	TIM1->CCER |= 0x01<<0 ; //Enable Channel 1
 	TIM1->CCER |= 0x01<<4 ; //Enable Channel 2
 	

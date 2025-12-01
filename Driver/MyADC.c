@@ -18,6 +18,11 @@ void MyADC_Init(ADC_TypeDef * ADC, int ADCPrescaler) {
 void ADC1_2_IRQHandler(void) {
 	n = ADC1->DR ;
 }
+
+float MyADC_GetConversion() {
+	return n ;
+}
+
 void MyADC_StartConvert() {
 	ADC1->CR2 |= 0x01<<22 ; //Debut de la conversion SWSTART
 }

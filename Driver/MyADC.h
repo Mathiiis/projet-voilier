@@ -8,4 +8,6 @@ void MyADC_Init(ADC_TypeDef * ADC, int ADCPrescaler) ;
 
 void MyADC_StartConvert() ;
 
+float MyADC_GetConversion() ;
+
 #endif

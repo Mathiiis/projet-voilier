@@ -6,13 +6,6 @@
 #include "Servo.h"
 #include "Girouette.h"
 
-
-
-
-
-
-
-
 int watched_value;
 
 /////////////////////////////////
