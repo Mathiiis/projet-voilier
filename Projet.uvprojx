@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>.\Pilotes</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -392,37 +392,37 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Driver</GroupName>
+          <GroupName>Pilotes</GroupName>
           <Files>
             <File>
-              <FileName>Pilote_GPIO.c</FileName>
+              <FileName>GPIO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\Pilote_GPIO.c</FilePath>
+              <FilePath>.\Pilotes\GPIO.c</FilePath>
             </File>
             <File>
               <FileName>MyTimer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\MyTimer.c</FilePath>
+              <FilePath>.\Pilotes\MyTimer.c</FilePath>
             </File>
             <File>
-              <FileName>MyADC.c</FileName>
+              <FileName>ADC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\MyADC.c</FilePath>
+              <FilePath>.\Pilotes\ADC.c</FilePath>
             </File>
             <File>
-              <FileName>MyUSART.c</FileName>
+              <FileName>USART.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\MyUSART.c</FilePath>
+              <FilePath>.\Pilotes\USART.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Periph</GroupName>
-          <Files>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Pilotes\Servo.c</FilePath>
+            </File>
             <File>
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Periph\Girouette.c</FilePath>
+              <FilePath>.\Pilotes\Girouette.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -768,7 +768,7 @@
               <MiscControls></MiscControls>
               <Define></Define>
               <Undefine></Undefine>
-              <IncludePath></IncludePath>
+              <IncludePath>.\Pilotes</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -820,37 +820,37 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Driver</GroupName>
+          <GroupName>Pilotes</GroupName>
           <Files>
             <File>
-              <FileName>Pilote_GPIO.c</FileName>
+              <FileName>GPIO.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\Pilote_GPIO.c</FilePath>
+              <FilePath>.\Pilotes\GPIO.c</FilePath>
             </File>
             <File>
               <FileName>MyTimer.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\MyTimer.c</FilePath>
+              <FilePath>.\Pilotes\MyTimer.c</FilePath>
             </File>
             <File>
-              <FileName>MyADC.c</FileName>
+              <FileName>ADC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\MyADC.c</FilePath>
+              <FilePath>.\Pilotes\ADC.c</FilePath>
             </File>
             <File>
-              <FileName>MyUSART.c</FileName>
+              <FileName>USART.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Driver\MyUSART.c</FilePath>
+              <FilePath>.\Pilotes\USART.c</FilePath>
             </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Periph</GroupName>
-          <Files>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Pilotes\Servo.c</FilePath>
+            </File>
             <File>
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Periph\Girouette.c</FilePath>
+              <FilePath>.\Pilotes\Girouette.c</FilePath>
             </File>
           </Files>
         </Group>

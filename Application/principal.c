@@ -4,6 +4,13 @@
 #include "ADC.h"
 #include "USART.h"
 #include "Servo.h"
+#include "Girouette.h"
+
+
+
+
+
+
 
 
 int watched_value;
@@ -18,38 +25,12 @@ void Attente (void)
 }
 /////////////////////////////////
 
-/// GPIO
-void Toggle() {
-		if (LireBroche(GPIOC,8)) {
-			ResetBroche(GPIOC,8);
-		} else {
-			SetBroche(GPIOC,8);
-		}
-}
 
-/// Timer
-void scrutatingUIF() {
-		if ((TIM2->SR & 0x01<<0) == 1) { // Dans SR on regarde le registre UIF
-			Toggle() ;
-			TIM2->SR &= 0xF<<1 ;
-		}
-}
 
-/// USART
-void putChar(char c) {
-	USART2->DR = c ;
-	//Attention gerer le flag TXE
-	/*while (USART2->SR&(1<<7) == (1<<7)) {}*/
-}
-
-void send() {
-	putChar('a') ;
-	
-}
 
 void Emission(void)
 {
-	//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au dï¿½marrage c est pour l adc
+			//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au démarrage c est pour l adc
 	USART2->DR= 'a';
 }
 
@@ -61,16 +42,22 @@ void USART2_IRQHandler(void)
 {
 	toto = USART2->DR ;
 }
-
+int angle;
+	int DC;
 
 int main ( void )
 {
 	
-	Girouette_Init() ;
-
+	
 	MyServoInit();
+	Girouette_Init();
+	
+	while(1){
+		 angle = GirouetteGetAngle();
+		 DC = alpha_to_DC(angle);
+	} 
 	//RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
-  	/* MyTimer_Base_Init(TIM2, 4999, 14399);	
+  /* MyTimer_Base_Init(TIM2, 4999, 14399);	
 	
 
 	//InitTimer2();
@@ -86,22 +73,29 @@ int main ( void )
 	InitGPIO(GPIOA, 3, INPOUTFLOATING);
 
 	
-  	MyTimer_ActiveIT(TIM2, 3, Emission);
+  MyTimer_ActiveIT(TIM2, 3, Emission);
 	
   
 	USART2_Init();
 	
+	
+	
 	TIM2->CR1 |= TIM_CR1_CEN;//faut pas publier cette ligne!!!!!!!
 */
 	
-	// Gï¿½nï¿½re une PWM ï¿½ 10 kHz avec 50 % de rapport cyclique sur PA6
-	// f_PWM = 72 MHz / ((PSC+1) * (ARR+1))
-	// Par ex : PSC = 71, ARR = 99 ? 10 kHz
-	// MyTimer_PWM_TIM3_PA6(4999, 14399, 0.2f);
+	// Génère une PWM à 10 kHz avec 50 % de rapport cyclique sur PA6
+  // f_PWM = 72 MHz / ((PSC+1) * (ARR+1))
+  // Par ex : PSC = 71, ARR = 99 ? 10 kHz
+  // MyTimer_PWM_TIM3_PA6(4999, 14399, 0.2f);
+	
+
+	
+
 	
 	while (1)
 	{
-		//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au dï¿½marrage
+				//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au démarrage
+
 	}
 }
 

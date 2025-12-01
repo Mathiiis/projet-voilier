@@ -20,15 +20,15 @@ int alpha_to_theta(int alpha){
       return theta;
 }
 
-int theta_to_RC(int theta){
-      int RC = (theta*6/90)+5 ;
-      return RC;
+int theta_to_DC(int theta){
+      int DC = (theta*6/90)+5 ;
+      return DC;
             
 }
 
-int alpha_to_RC(int alpha){
+int alpha_to_DC(int alpha){
       int theta = alpha_to_theta(alpha);
-      return theta_to_RC(theta);
+      return theta_to_DC(theta)/100;
 }
 
 /*
@@ -37,10 +37,10 @@ void IT_functionn (void){
       MyTimer_PWM(TIM2, 2,RC);
 }*/
 
-void MyServoInit(void){
+void MyServoInit(){
 
-	
-		MyTimer_PWM_TIM3_PA6( 3599, 399, 0.1);
+		//int DC = alpha_to_DC(alpha);
+		MyTimer_PWM_TIM3_PA6( 3599, 399, 0.05);
 			//MyTimer_Base_Init(TIM2, 3599, 399);
       //MyTimer_ActiveIT( TIM2 , 5 , IT_functionn);
 

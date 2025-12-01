@@ -1,9 +1,10 @@
 --cpu Cortex-M3
 ".\objects\principal.o"
-".\objects\pilote_gpio.o"
+".\objects\gpio.o"
 ".\objects\mytimer.o"
-".\objects\myadc.o"
-".\objects\myusart.o"
+".\objects\adc.o"
+".\objects\usart.o"
+".\objects\servo.o"
 ".\objects\girouette.o"
 ".\objects\startup_stm32f10x_md.o"
 ".\objects\system_stm32f10x.o"

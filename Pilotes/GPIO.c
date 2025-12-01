@@ -1,12 +1,12 @@
 #include "GPIO.h"
 
 #include "stm32f10x.h"
-
+/*
 #define OUTPUTPUSHPULL           0x2   // CNF=00, MODE=10 ? 0010b
 #define OUTPUTALTERNATEPUSHPULL  0xA   // CNF=10, MODE=10 ? 1010b
-#define INPOUTFLOATING           0x4   // CNF=01, MODE=00 ? 0100b
-#define INPOUTANALOG             0x0   // CNF=00, MODE=00 ? 0000b
-
+#define INPUTFLOATING           0x4   // CNF=01, MODE=00 ? 0100b
+#define INPUTANALOG             0x0   // CNF=00, MODE=00 ? 0000b
+*/
 
 void InitGPIO(GPIO_TypeDef *PORT, char BROCHE, char CONFIG){
 	
