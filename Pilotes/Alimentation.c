@@ -8,9 +8,9 @@
 void Send_Warning(void) {
 	MyADC_StartConvert() ;
 	if (MyADC_GetConversion() < 0.769) {
-		USART2->DR = "Batterie Faible" ;
+		USART2->DR = 'F' ;
 	} else {
-		USART2->DR = "Batterie OK" ;
+		USART2->DR = 'T' ;
 	}		
 }
 

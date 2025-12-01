@@ -400,6 +400,11 @@
               <FilePath>.\Pilotes\GPIO.c</FilePath>
             </File>
             <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Pilotes\Servo.c</FilePath>
+            </File>
+            <File>
               <FileName>MyTimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Pilotes\MyTimer.c</FilePath>
@@ -415,14 +420,14 @@
               <FilePath>.\Pilotes\USART.c</FilePath>
             </File>
             <File>
-              <FileName>Servo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\Servo.c</FilePath>
-            </File>
-            <File>
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Pilotes\Girouette.c</FilePath>
+            </File>
+            <File>
+              <FileName>Alimentation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Pilotes\Alimentation.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -828,6 +833,11 @@
               <FilePath>.\Pilotes\GPIO.c</FilePath>
             </File>
             <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Pilotes\Servo.c</FilePath>
+            </File>
+            <File>
               <FileName>MyTimer.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Pilotes\MyTimer.c</FilePath>
@@ -843,14 +853,14 @@
               <FilePath>.\Pilotes\USART.c</FilePath>
             </File>
             <File>
-              <FileName>Servo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\Servo.c</FilePath>
-            </File>
-            <File>
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Pilotes\Girouette.c</FilePath>
+            </File>
+            <File>
+              <FileName>Alimentation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Pilotes\Alimentation.c</FilePath>
             </File>
           </Files>
         </Group>

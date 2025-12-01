@@ -5,6 +5,7 @@
 #include "USART.h"
 #include "Servo.h"
 #include "Girouette.h"
+#include "Alimentation.h"
 
 int watched_value;
 
@@ -28,15 +29,9 @@ void Emission(void)
 }
 
 extern int valeur;
-
-
 char toto ;
-void USART2_IRQHandler(void)
-{
-	toto = USART2->DR ;
-}
-	int angle;
-	float DC;
+int angle;
+float DC;
 
 int main ( void )
 {
@@ -46,10 +41,10 @@ int main ( void )
 				MyServoInit();
 
 	while(1){
-		 angle = GirouetteGetAngle();
-		 DC = alpha_to_DC(angle);
+		angle = GirouetteGetAngle();
+		DC = alpha_to_DC(angle);
 		SetDC(DC);
-
+		Alimentation_Init() ;
 	} 
 	//RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
   /* MyTimer_Base_Init(TIM2, 4999, 14399);	
