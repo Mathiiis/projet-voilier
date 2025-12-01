@@ -42,19 +42,21 @@ void USART2_IRQHandler(void)
 {
 	toto = USART2->DR ;
 }
-int angle;
-	int DC;
+	int angle;
+	float DC;
 
 int main ( void )
 {
 	
 	
-	MyServoInit();
 	Girouette_Init();
-	
+				MyServoInit();
+
 	while(1){
 		 angle = GirouetteGetAngle();
 		 DC = alpha_to_DC(angle);
+		SetDC(DC);
+
 	} 
 	//RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
   /* MyTimer_Base_Init(TIM2, 4999, 14399);	
