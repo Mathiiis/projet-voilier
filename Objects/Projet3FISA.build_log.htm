@@ -21,29 +21,35 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.3.0.0
 Dialog DLL:      TARMSTM.DLL V1.67.1.0
  
 <h2>Project:</h2>
-U:\Windows\Bureau\Travail\4A\Sys_Embarque\Projet\projet-voilier\Projet.uvprojx
+U:\Windows\Bureau\Travail\4A\Sys_Embarque\Projet\Projet_Voilier\projet-voilier\Projet.uvprojx
 Project File Date:  12/05/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.23', folder: 'C:\Keil\542a\ARM\ARMCLANG\Bin'
 Rebuild target 'Reel'
-compiling GPIO.c...
-Driver1/USART.c(38): warning: unused parameter 'USART' [-Wunused-parameter]
-   38 | void MyUSART_ActiveIT(USART_TypeDef * USART) {
+compiling Servo.c...
+Driver1/USART.c(41): warning: unused parameter 'USART' [-Wunused-parameter]
+   41 | void MyUSART_ActiveIT(USART_TypeDef * USART) {
       |                                       ^
 1 warning generated.
 compiling USART.c...
 compiling ADC.c...
+compiling GPIO.c...
 compiling Timer.c...
-compiling Servo.c...
-compiling principal.c...
 compiling Alimentation.c...
+Application/principal.c(29): warning: unused function 'Telecommande_GetPlateauCmd' [-Wunused-function]
+   29 | static int8_t Telecommande_GetPlateauCmd(void)
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+compiling principal.c...
 assembling startup_stm32f10x_md.s...
 compiling Girouette.c...
+compiling Telecommande.c...
 compiling system_stm32f10x.c...
+compiling Plateau.c...
 linking...
-Program Size: Code=5348 RO-data=252 RW-data=0 ZI-data=1664  
-".\Objects\Projet3FISA.axf" - 0 Error(s), 1 Warning(s).
+Program Size: Code=6972 RO-data=300 RW-data=0 ZI-data=1672  
+".\Objects\Projet3FISA.axf" - 0 Error(s), 2 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -70,10 +76,10 @@ Package Vendor: Keil
    * Component: ARM::CMSIS:CORE@6.1.1
 
    * Component: Keil::Device:Startup@1.0.0
-      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
-      Source file:   Device/Source/ARM/STM32F1xx_OPT.s
-      Include file:  RTE_Driver/Config/RTE_Device.h
       Source file:   Device/Source/system_stm32f10x.c
+      Include file:  RTE_Driver/Config/RTE_Device.h
+      Source file:   Device/Source/ARM/STM32F1xx_OPT.s
+      Source file:   Device/Source/ARM/startup_stm32f10x_md.s
 Build Time Elapsed:  00:00:03
 </pre>
 </body>

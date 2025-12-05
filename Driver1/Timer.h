@@ -20,5 +20,11 @@ void MyTimer_PWM_TIM3_PA6(unsigned short ARR, unsigned short PSC, float DutyCycl
 void MyTimer_Base_Init( TIM_TypeDef *Timer , unsigned short ValARR , unsigned short ValPSC ) ;
 #define MyTimer_Base_Start( Timer ) ( Timer->CR1 |= TIM_CR1_CEN );
 #define MyTimer_Base_Stop( Timer ) ( Timer -> =CR1 &= ~TIM_CR1_CEN);
+void MyTimer_PWM_Init(GPIO_TypeDef* GPIOx, uint8_t Pin,
+                      TIM_TypeDef* TIMx, uint8_t Channel,
+                      unsigned short ARR, unsigned short PSC);
+
+
+void MyTimer_PWM_SetDutyCycle(TIM_TypeDef* TIMx, uint8_t Channel, float DutyCycle);
 
 #endif

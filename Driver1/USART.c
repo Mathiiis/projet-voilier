@@ -9,6 +9,9 @@ void USART2_Init(void)
     // 1) Activer les horloges
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;   // GPIOA
     RCC->APB1ENR |= RCC_APB1ENR_USART2EN; // USART2
+	
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+	RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
 
   
     // 2) Régler la vitesse (9600 bauds avec PCLK1 = 36 MHz)
@@ -22,7 +25,7 @@ void USART2_Init(void)
 	
 	}
 
-int ch = 0 ;
+int ch ;
 
 void MyUSART_Init(USART_TypeDef * USART) {
 	USART->CR1 |= 0x1<<13 ; // Active l'USART
@@ -49,7 +52,7 @@ void USART2_IRQHandler(void) {
 
 void USART2_SendChar(char c)
 {
-    while(!(USART2->SR & USART_SR_TXE));  // Attendre TXE = 1
+    //while(!(USART2->SR & USART_SR_TXE));  // Attendre TXE = 1
     USART2->DR = c;
 }
 

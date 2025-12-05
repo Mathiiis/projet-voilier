@@ -6,4 +6,5 @@
   Application\..\Driver1\GPIO.h Application\..\Driver1\Timer.h \
   Application\..\Driver1\ADC.h Application\..\Driver1\USART.h \
   Application\..\Periph\Servo.h Application\..\Periph\Girouette.h \
-  Application\..\Periph\Alimentation.h
+  Application\..\Periph\Alimentation.h Application\..\Periph\Plateau.h \
+  Application\..\Periph\Telecommande.h

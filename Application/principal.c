@@ -11,12 +11,15 @@
 #include "../Periph/Girouette.h"
 #include "../Periph/Alimentation.h"
 #include "../Periph/Plateau.h"
+#include "../Periph/Telecommande.h"
 
 extern int valeur;
+extern int ch;
 char toto ;
-int angle;
+int AngleVent;
 float DC;
-
+char sens = 0;      // -1 = bâbord, 0 = stop, +1 = tribord (convention driver télécommande)
+char vitesse = 0;   // 0..100 %
 
 /*
  * Parse une consigne reçue sur l'USART2 sous la forme d'un entier signé ASCII
@@ -60,18 +63,6 @@ static int8_t Telecommande_GetPlateauCmd(void)
 }
 
 
-void System_Clock_Init(void)
-{
-    // Déjà programmé par défaut, mais propre à rappeler :
-    // SYSCLK = 72 MHz via HSE+PLL
-
-    RCC->CFGR |= RCC_CFGR_PPRE1_DIV2;   // APB1 = 36 MHz
-    RCC->CFGR |= RCC_CFGR_PPRE2_DIV1;   // APB2 = 72 MHz
-
-    RCC->CFGR |= RCC_CFGR_ADCPRE_DIV6;  // ADC = 12 MHz
-}
-
-
 void Send_Telemetry(void)
 {
     float Vbat = GetBatteryVoltage();
@@ -96,35 +87,53 @@ void TIM3_Message_Init(void)
 
 int main(void)
 {
-    System_Clock_Init();
-
-    // --- Initialisation des modules ---
-    MyUSART_Init(USART2);
-    MyUSART_SetBaudRate(USART2, 9600);
 
     Alimentation_Init();
     Girouette_Init();
     MyServoInit();
-    Plateau_Init();
-    
-    TIM3_Message_Init();  // messages toutes les 3 secondes
+    InitPlateau();
+
+    // Initialisation de la télécommande (config USART2, etc.)
+    Telecommande_Init();
+
+
+
+    //TIM3_Message_Init();  // messages toutes les 3 secondes
 
     USART2_SendString("Systeme Voilier 2.0 - READY\n");
 
     while(1)
     {
-        // --- Mesure vent ---
-        int AngleVent = GirouetteGetAngle();
+        // --- Mesure vent / asservissement voile ---
+        AngleVent = GirouetteGetAngle();
         float DC = alpha_to_DC(AngleVent);
-				SetDC(DC);
+        SetDC(DC);
 
-        // --- Commande du plateau depuis télécommande ---
-        int8_t plateauCmd = Telecommande_GetPlateauCmd();
-        Plateau_SetSpeed(plateauCmd);
+        // --- Lecture de la consigne plateau via télécommande ---
+        Telecommande_GetDirectionVitesse(&sens, &vitesse);
 
-        // --- Sécurités ---
-        //Check_Roulis();
-        //Check_Batterie();
+        // Sécurité : clamp de la vitesse 0..100
+        if (vitesse < 0) vitesse = 0;
+        if (vitesse > 100) vitesse = 100;
+
+        // Gestion sens + vitesse
+        if (sens < 0)
+        {
+            // Bâbord : par ex. PB7 à 0
+            ResetBroche(GPIOB, 7);
+            SetPlateau((float)vitesse);   // PWM proportionnelle
+        }
+        else if (sens > 0)
+        {
+            // Tribord : par ex. PB7 à 1
+            SetBroche(GPIOB, 7);
+            SetPlateau((float)vitesse);
+        }
+        else
+        {
+            // Stop
+            SetPlateau(0.0f);
+        }
     }
 }
 
@@ -143,7 +152,7 @@ int main ( void )
 	} 
 	//RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
    MyTimer_Base_Init(TIM2, 4999, 14399);	
-	
+
 
 	//InitTimer2();
 	//watched_value = TIM2->CNT;
@@ -176,6 +185,7 @@ int main ( void )
 
 	
 
+
 	
 	while (1)
 	{
@@ -185,9 +195,9 @@ int main ( void )
 
 
 
-// CONFIGURATION MANUELLE DES BROCHES
-// 
-//  GPIOA pin 0 : push-pull output 2 MHz
+ // CONFIGURATION MANUELLE DES BROCHES
+ // 
+ //  GPIOA pin 0 : push-pull output 2 MHz
 	GPIOA->CRL &= ~0xF;
 	GPIOA->CRL |= 0x2;
 
@@ -204,4 +214,3 @@ int main ( void )
 	GPIOC->CRL &= ~0xF; //floating
 	GPIOC->CRL |= 0x4;
 	*/
-}	

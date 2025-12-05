@@ -145,6 +145,86 @@ void MyTimer_PWM_TIM3_PA6(unsigned short ARR, unsigned short PSC, float DutyCycl
 
 
 
+void MyTimer_PWM_Init(GPIO_TypeDef* GPIOx, uint8_t Pin,
+                      TIM_TypeDef* TIMx, uint8_t Channel,
+                      unsigned short ARR, unsigned short PSC)
+{
+    // 1. Activer horloge GPIO
+    if (GPIOx == GPIOA) RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
+    if (GPIOx == GPIOB) RCC->APB2ENR |= RCC_APB2ENR_IOPBEN;
+    if (GPIOx == GPIOC) RCC->APB2ENR |= RCC_APB2ENR_IOPCEN;
+
+    // 2. Activer horloge Timer
+    if (TIMx == TIM1) RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
+    if (TIMx == TIM2) RCC->APB1ENR |= RCC_APB1ENR_TIM2EN;
+    if (TIMx == TIM3) RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+    if (TIMx == TIM4) RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+
+    // 3. Configurer le pin GPIO en AF Push-Pull 50 MHz
+    if (Pin < 8) {
+        GPIOx->CRL &= ~(0xF << (Pin * 4));
+        GPIOx->CRL |= (0xB << (Pin * 4));
+    } else {
+        GPIOx->CRH &= ~(0xF << ((Pin - 8) * 4));
+        GPIOx->CRH |= (0xB << ((Pin - 8) * 4));
+    }
+
+    // 4. Configurer base timer
+    TIMx->PSC = PSC;
+    TIMx->ARR = ARR;
+    TIMx->CNT = 0;
+
+    // 5. Configurer le canal en PWM1
+    switch(Channel)
+    {
+        case 1:
+            TIMx->CCMR1 &= ~(0xFF);
+            TIMx->CCMR1 |= (6 << 4);  // OC1M = 110 PWM1
+            TIMx->CCMR1 |= (1 << 3);  // OC1PE = 1
+            TIMx->CCER |= (1 << 0);   // CC1E
+            break;
+        case 2:
+            TIMx->CCMR1 &= ~(0xFF00);
+            TIMx->CCMR1 |= (6 << 12); // OC2M = 110 PWM1
+            TIMx->CCMR1 |= (1 << 11); // OC2PE
+            TIMx->CCER |= (1 << 4);   // CC2E
+            break;
+        case 3:
+            TIMx->CCMR2 &= ~(0xFF);
+            TIMx->CCMR2 |= (6 << 4);
+            TIMx->CCMR2 |= (1 << 3);
+            TIMx->CCER |= (1 << 8);
+            break;
+        case 4:
+            TIMx->CCMR2 &= ~(0xFF00);
+            TIMx->CCMR2 |= (6 << 12);
+            TIMx->CCMR2 |= (1 << 11);
+            TIMx->CCER |= (1 << 12);
+            break;
+    }
+
+    // 6. ARPE + chargement registre
+    TIMx->CR1 |= TIM_CR1_ARPE;
+    TIMx->EGR |= TIM_EGR_UG;
+
+    // 7. D marrer le timer
+    TIMx->CR1 |= TIM_CR1_CEN;
+}
+
+
+void MyTimer_PWM_SetDutyCycle(TIM_TypeDef* TIMx, uint8_t Channel, float DutyCycle)
+{
+    // DutyCycle : 0.0 ? 1.0
+    unsigned short ccr = (unsigned short)(TIMx->ARR * DutyCycle);
+
+    switch(Channel)
+    {
+        case 1: TIMx->CCR1 = ccr; break;
+        case 2: TIMx->CCR2 = ccr; break;
+        case 3: TIMx->CCR3 = ccr; break;
+        case 4: TIMx->CCR4 = ccr; break;
+    }
+}
 
 
 

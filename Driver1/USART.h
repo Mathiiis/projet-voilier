@@ -4,6 +4,8 @@
 
 void MyUSART_Init(USART_TypeDef * USART) ;
 
+void USART2_Init(void) ;
+
 void MyUSART_ActiveIT(USART_TypeDef * USART) ;
 	
 void MyUSART_SetBaudRate(USART_TypeDef * USART, int baudrate) ;

@@ -12,9 +12,6 @@ void MyADC1_Config_PA0(void)
     RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;   // enable GPIOA
     RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;   // enable ADC1
 
-    // 2) PA0 en mode analogique (MODE0=00, CNF0=00)
-    GPIOA->CRL &= ~(0xF << (0 * 4));
-
     // 4) Power-on
     ADC1->CR2 |= ADC_CR2_ADON;            // ADON=1 (power on)
    

@@ -2,11 +2,12 @@
 #include "Alimentation.h"
 #include "../Driver2/Pilote_GPIO.h"
 #include "../Driver2/MyTimer.h"
-#include "../Driver2/MyADC.h"
+#include "../Driver1/ADC.h"
 #include "../Driver1/USART.h"
 
 float GetBatteryVoltage(void)
 {
+
 	MyADC_StartConvert();
 	float adc = MyADC_GetConversion();
 	return adc * 3.3f / 4095.0f * 13.0f; // pont diviseur (47k/3.9k)
@@ -26,6 +27,9 @@ void Alimentation_Init() {
 	
 	RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
 	RCC->APB1ENR |= RCC_APB1ENR_USART2EN ;
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+	RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+
 
 	
 	//USART
@@ -35,14 +39,14 @@ void Alimentation_Init() {
 	MyTimer_Base_Init(TIM2,35999,199) ; // Formule (1/f_clk_rcc[=souvent 72 MHz]) * (ARR+1) * (PSC+1) = f_horloge_voulue
 	MyTimer_ActiveIT(TIM2,3,Send_Warning) ;
 	
-	MyUSART_Init(USART2);
-	MyUSART_SetBaudRate(USART2,9600) ;
-	MyUSART_ActiveIT(USART2) ;
-	
+	  MyUSART_Init(USART2);
+    MyUSART_SetBaudRate(USART2,9600);
+    MyUSART_ActiveIT(USART2);
+
 	//ADC
 	InitGPIO(GPIOA,0,INPUTANALOG) ; 
 	
-	MyADC_Init(ADC1,8);
+	MyADC1_Config_PA0();
 		
 	MyTimer_Base_Start(TIM2) ; // Allume le Timer a la fin pour faire des send apres avoir config l'USART	
 }

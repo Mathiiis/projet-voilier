@@ -434,6 +434,16 @@
               <FileType>1</FileType>
               <FilePath>.\Periph\Girouette.c</FilePath>
             </File>
+            <File>
+              <FileName>Plateau.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Plateau.c</FilePath>
+            </File>
+            <File>
+              <FileName>Telecommande.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Telecommande.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -871,6 +881,16 @@
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Periph\Girouette.c</FilePath>
+            </File>
+            <File>
+              <FileName>Plateau.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Plateau.c</FilePath>
+            </File>
+            <File>
+              <FileName>Telecommande.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Telecommande.c</FilePath>
             </File>
           </Files>
         </Group>
