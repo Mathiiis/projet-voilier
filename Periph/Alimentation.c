@@ -1,17 +1,20 @@
 #include "stm32f10x.h"
 #include "Alimentation.h"
-#include "../Driver/Pilote_GPIO.h"
-#include "../Driver/MyTimer.h"
-#include "../Driver/MyADC.h"
-#include "../Driver/MyUSART.h"
+#include "../Driver2/Pilote_GPIO.h"
+#include "../Driver2/MyTimer.h"
+#include "../Driver2/MyADC.h"
+#include "../Driver1/USART.h"
 
 void Send_Warning(void) {
 	MyADC_StartConvert() ;
-	if (MyADC_GetConversion() < 0.769) {
-		USART2->DR = 'F' ;
-	} else {
-		USART2->DR = 'T' ;
-	}		
+	uint16_t adc = MyADC_GetConversion();
+	float Vbat = adc * 3.3f / 4095.0f * 13.0f;
+
+	if (Vbat < 10.0f)
+			USART2_SendChar('F');
+	else
+			USART2_SendChar('T');
+	
 }
 
 void Alimentation_Init() {

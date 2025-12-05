@@ -395,39 +395,44 @@
           <GroupName>Pilotes</GroupName>
           <Files>
             <File>
-              <FileName>GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\GPIO.c</FilePath>
-            </File>
-            <File>
-              <FileName>Servo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\Servo.c</FilePath>
-            </File>
-            <File>
-              <FileName>MyTimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\MyTimer.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Pilotes\ADC.c</FilePath>
+              <FilePath>.\Driver1\ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Driver1\GPIO.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Driver1\Timer.c</FilePath>
             </File>
             <File>
               <FileName>USART.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Pilotes\USART.c</FilePath>
+              <FilePath>.\Driver1\USART.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Periph</GroupName>
+          <Files>
+            <File>
+              <FileName>Alimentation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Alimentation.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Servo.c</FilePath>
             </File>
             <File>
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Pilotes\Girouette.c</FilePath>
-            </File>
-            <File>
-              <FileName>Alimentation.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\Alimentation.c</FilePath>
+              <FilePath>.\Periph\Girouette.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -828,39 +833,44 @@
           <GroupName>Pilotes</GroupName>
           <Files>
             <File>
-              <FileName>GPIO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\GPIO.c</FilePath>
-            </File>
-            <File>
-              <FileName>Servo.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\Servo.c</FilePath>
-            </File>
-            <File>
-              <FileName>MyTimer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\MyTimer.c</FilePath>
-            </File>
-            <File>
               <FileName>ADC.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Pilotes\ADC.c</FilePath>
+              <FilePath>.\Driver1\ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>GPIO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Driver1\GPIO.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Driver1\Timer.c</FilePath>
             </File>
             <File>
               <FileName>USART.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Pilotes\USART.c</FilePath>
+              <FilePath>.\Driver1\USART.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Periph</GroupName>
+          <Files>
+            <File>
+              <FileName>Alimentation.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Alimentation.c</FilePath>
+            </File>
+            <File>
+              <FileName>Servo.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Periph\Servo.c</FilePath>
             </File>
             <File>
               <FileName>Girouette.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Pilotes\Girouette.c</FilePath>
-            </File>
-            <File>
-              <FileName>Alimentation.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Pilotes\Alimentation.c</FilePath>
+              <FilePath>.\Periph\Girouette.c</FilePath>
             </File>
           </Files>
         </Group>
