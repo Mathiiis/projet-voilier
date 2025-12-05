@@ -9,27 +9,6 @@
 #include "../Periph/Girouette.h"
 #include "../Periph/Alimentation.h"
 
-int watched_value;
-
-/////////////////////////////////
-//  fonction 'pas top top'     //
-//  d'attente d'environ 250 ms //
-/////////////////////////////////
-void Attente (void)
-{
-	for (int i = 0 ; i < 1000000 ; i++){}
-}
-/////////////////////////////////
-
-
-
-
-void Emission(void)
-{
-			//ADC1->CR2 |= ADC_CR2_SWSTART;   // bit 22 = 1, auto-clear par le HW au démarrage c est pour l adc
-	USART2->DR= 'a';
-}
-
 extern int valeur;
 char toto ;
 int angle;
@@ -52,8 +31,6 @@ void Send_Telemetry(void)
 {
     float Vbat = GetBatteryVoltage();
     int AngleVent = GirouetteGetAngle();
-		float DC = alpha_to_DC(AngleVent);
-		SetDC(DC);
 
     char msg[128];
     sprintf(msg,
@@ -92,17 +69,17 @@ int main(void)
     while(1)
     {
         // --- Mesure vent ---
-        int alpha = GirouetteGetAngle();
-        int theta = ComputeThetaFromAlpha(alpha);
-        SetVoile(theta);
+        int AngleVent = GirouetteGetAngle();
+        float DC = alpha_to_DC(AngleVent);
+				SetDC(DC);
 
         // --- Commande du plateau depuis télécommande ---
-        int cmd = GetRemoteCommand(); 
-        Plateau_SetSpeed(cmd);
+        //int cmd = GetRemoteCommand(); 
+        //Plateau_SetSpeed(cmd);
 
         // --- Sécurités ---
-        Check_Roulis();
-        Check_Batterie();
+        //Check_Roulis();
+        //Check_Batterie();
     }
 }
 
