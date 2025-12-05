@@ -5,10 +5,15 @@
 #include "../Driver2/MyADC.h"
 #include "../Driver1/USART.h"
 
+float GetBatteryVoltage(void)
+{
+	MyADC_StartConvert();
+	float adc = MyADC_GetConversion();
+	return adc * 3.3f / 4095.0f * 13.0f; // pont diviseur (47k/3.9k)
+}
+
 void Send_Warning(void) {
-	MyADC_StartConvert() ;
-	uint16_t adc = MyADC_GetConversion();
-	float Vbat = adc * 3.3f / 4095.0f * 13.0f;
+	float Vbat = GetBatteryVoltage();
 
 	if (Vbat < 10.0f)
 			USART2_SendChar('F');

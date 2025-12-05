@@ -1,5 +1,7 @@
 #include "stm32f10x.h"
-#include "stdio.h"                 
+#include "stdio.h"
+#include "stdlib.h"
+#include "stdint.h"
 
 #include "../Driver1/GPIO.h"
 #include "../Driver1/Timer.h"
@@ -8,11 +10,54 @@
 #include "../Periph/Servo.h"
 #include "../Periph/Girouette.h"
 #include "../Periph/Alimentation.h"
+#include "../Periph/Plateau.h"
 
 extern int valeur;
 char toto ;
 int angle;
 float DC;
+
+
+/*
+ * Parse une consigne reçue sur l'USART2 sous la forme d'un entier signé ASCII
+ * ex: "-75" ou "40", terminée par \r ou \n.
+ * Conserve la dernière consigne valide entre deux réceptions.
+ */
+static int8_t Telecommande_GetPlateauCmd(void)
+{
+    static char buf[8];
+    static uint8_t idx = 0;
+    static int8_t lastCmd = 0;
+
+    if(USART2->SR & USART_SR_RXNE)
+    {
+        char c = USART2->DR;
+
+        if(c == '\r' || c == '\n')
+        {
+            buf[idx] = '\0';
+            idx = 0;
+
+            if(buf[0] != '\0')
+            {
+                int val = atoi(buf);
+                if(val > 100)  val = 100;
+                if(val < -100) val = -100;
+                lastCmd = (int8_t)val;
+            }
+        }
+        else if(idx < sizeof(buf) - 1)
+        {
+            buf[idx++] = c;
+        }
+        else
+        {
+            idx = 0; // overflow -> reset buffer
+        }
+    }
+
+    return lastCmd;
+}
 
 
 void System_Clock_Init(void)
@@ -60,8 +105,8 @@ int main(void)
     Alimentation_Init();
     Girouette_Init();
     MyServoInit();
+    Plateau_Init();
     
-
     TIM3_Message_Init();  // messages toutes les 3 secondes
 
     USART2_SendString("Systeme Voilier 2.0 - READY\n");
@@ -74,8 +119,8 @@ int main(void)
 				SetDC(DC);
 
         // --- Commande du plateau depuis télécommande ---
-        //int cmd = GetRemoteCommand(); 
-        //Plateau_SetSpeed(cmd);
+        int8_t plateauCmd = Telecommande_GetPlateauCmd();
+        Plateau_SetSpeed(plateauCmd);
 
         // --- Sécurités ---
         //Check_Roulis();
