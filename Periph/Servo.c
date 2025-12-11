@@ -2,9 +2,14 @@
 #include "Servo.h"
 #include "../Driver1/Timer.h"
 
-int alpha_to_theta(int alpha){
+/*int alpha_to_theta(int alpha){
       int theta=0;
-      int alphamod = alpha % 180;
+      int alphamod =0 ;
+			if (alpha>180){
+				alpha = alpha -180;
+				alphamod = 180 - alpha;
+			}
+			
       if(alphamod>=0 && alphamod<=45){
             theta=0;
       }           
@@ -13,7 +18,31 @@ int alpha_to_theta(int alpha){
       }
 
       return theta;
+}*/
+
+
+int alpha_to_theta(int alpha)
+{
+    // Normalise dans [0 ; 360]
+    alpha = alpha % 360;
+
+    // Convertit en angle symétrique [0 ; 180]
+    int a = alpha;
+    if(a > 180)
+        a = 360 - a;
+
+    // 1) Zone voiles fermées
+    if(a <= 45)
+        return 0;
+
+    // 2) Zone affine de 45° à 180° => ? de 0° à 90°
+    // ? = (a - 45) * 90 / 135
+    int theta = (a - 45) * 90 / 135;
+
+    return theta;
 }
+
+
 
 float theta_to_DC(int theta){
       float DC = (theta*6/90)+5 ;

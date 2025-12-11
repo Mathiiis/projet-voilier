@@ -5,48 +5,42 @@
 #include "../Driver1/ADC.h"
 #include "../Driver1/USART.h"
 
-float GetBatteryVoltage(void)
+void ADC1_Init_PA0_Interrupt(void)
 {
+    /* 1) Activation horloges */
+    RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;   // GPIOA
+    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;   // ADC1
 
-	MyADC_StartConvert();
-	float adc = MyADC_GetConversion();
-	return adc * 3.3f / 4095.0f * 13.0f; // pont diviseur (47k/3.9k)
+    /* 2) PA0 en mode analogique */
+    GPIOA->CRL &= ~(0xF << (0 * 4));      // MODE=00, CNF=00
+
+    /* 3) Configuration ADC */
+    ADC1->CR2 |= ADC_CR2_ADON;            // ADC ON
+    for(volatile int i=0; i<20000; i++);  // petit délai
+
+    // Long sample time pour stabilité
+    ADC1->SMPR2 |= ADC_SMPR2_SMP0_2;      // 55.5 cycles
+
+    /* Séquence: une seule conversion, canal 0 */
+    ADC1->SQR1 = 0;
+    ADC1->SQR3 = 0;                        // PA0 = Channel 0
+
+    /* 4) Calibration */
+    ADC1->CR2 |= ADC_CR2_CAL;
+    while (ADC1->CR2 & ADC_CR2_CAL);
+
+    /* 5) Active interruption EOC */
+    ADC1->CR1 |= ADC_CR1_EOCIE;
+
+    /* 6) Active ADC interrupt dans NVIC */
+    NVIC_EnableIRQ(ADC1_2_IRQn);
+
+    /* 7) Lancer la première conversion */
+    ADC1->CR2 |= ADC_CR2_ADON;    // Start
 }
 
-void Send_Warning(void) {
-	float Vbat = GetBatteryVoltage();
-
-	if (Vbat < 10.0f)
-			USART2_SendChar('F');
-	else
-			USART2_SendChar('T');
-	
-}
-
-void Alimentation_Init() {
-	
-	RCC->APB2ENR |= (1<<4) | RCC_APB2ENR_IOPAEN ;
-	RCC->APB1ENR |= RCC_APB1ENR_USART2EN ;
-	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
-	RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
 
 
-	
-	//USART
-	InitGPIO(GPIOA,2,OUTPUTALTERNATEPUSHPULL) ;
-	InitGPIO(GPIOA,3,INPUTFLOATING) ;
-	
-	MyTimer_Base_Init(TIM2,35999,199) ; // Formule (1/f_clk_rcc[=souvent 72 MHz]) * (ARR+1) * (PSC+1) = f_horloge_voulue
-	MyTimer_ActiveIT(TIM2,3,Send_Warning) ;
-	
-	  MyUSART_Init(USART2);
-    MyUSART_SetBaudRate(USART2,9600);
-    MyUSART_ActiveIT(USART2);
 
-	//ADC
-	InitGPIO(GPIOA,0,INPUTANALOG) ; 
-	
-	MyADC1_Config_PA0();
-		
-	MyTimer_Base_Start(TIM2) ; // Allume le Timer a la fin pour faire des send apres avoir config l'USART	
-}
+
+

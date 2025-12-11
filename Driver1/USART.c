@@ -50,6 +50,10 @@ void USART2_IRQHandler(void) {
 	ch = USART2->DR ;
 }
 
+void USART1_IRQHandler(void) {
+	ch = USART1->DR ;
+}
+
 void USART2_SendChar(char c)
 {
     //while(!(USART2->SR & USART_SR_TXE));  // Attendre TXE = 1
@@ -65,3 +69,17 @@ void USART2_SendString(const char *s)
     }
 }
 
+void USART1_SendChar(char c)
+{
+    //while(!(USART2->SR & USART_SR_TXE));  // Attendre TXE = 1
+    USART1->DR = c;
+}
+
+void USART1_SendString(const char *s)
+{
+    while(*s)
+    {
+        USART1_SendChar(*s);
+        s++;
+    }
+}

@@ -20,87 +20,107 @@ int AngleVent;
 float DC;
 char sens = 0;      // -1 = bâbord, 0 = stop, +1 = tribord (convention driver télécommande)
 char vitesse = 0;   // 0..100 %
-
+ int lastCommand;
+int battery_raw;
 /*
  * Parse une consigne reçue sur l'USART2 sous la forme d'un entier signé ASCII
  * ex: "-75" ou "40", terminée par \r ou \n.
  * Conserve la dernière consigne valide entre deux réceptions.
  */
-static int8_t Telecommande_GetPlateauCmd(void)
+ 
+
+void CheckBatteryAndSend(void)
 {
-    static char buf[8];
-    static uint8_t idx = 0;
-    static int8_t lastCmd = 0;
-
-    if(USART2->SR & USART_SR_RXNE)
+	
+		float bat = GetBatteryVoltage();
+    if (bat < 10.0f)
     {
-        char c = USART2->DR;
+        USART3_SendString("Batterie faible\r\n");
+    }
+    else
+    {
+        USART3_SendString("Batterie OK\r\n");
+    }
+}
+void ADC1_2_IRQHandler(void)
+{
+    if (ADC1->SR & ADC_SR_EOC)
+    {
+        battery_raw = ADC1->DR;  // Lire efface EOC
+        //ADC1->CR2 |= ADC_CR2_ADON;   // Relance une conversion
+    }
+}
 
-        if(c == '\r' || c == '\n')
-        {
-            buf[idx] = '\0';
-            idx = 0;
+float GetBatteryVoltage(void)
+{
+    float vADC = (battery_raw * 3.3f) / 4095.0f;
+    float vBAT = vADC * 13.0f;   // pont diviseur 1/13
+    return vBAT;
+}
 
-            if(buf[0] != '\0')
-            {
-                int val = atoi(buf);
-                if(val > 100)  val = 100;
-                if(val < -100) val = -100;
-                lastCmd = (int8_t)val;
-            }
-        }
-        else if(idx < sizeof(buf) - 1)
-        {
-            buf[idx++] = c;
-        }
-        else
-        {
-            idx = 0; // overflow -> reset buffer
-        }
+void SetPlateauCommand(void)
+{
+    float DC;
+
+    if (lastCommand >= 0)
+    {
+        SetPlateauSens(1);   // Tribord
+        DC = lastCommand;
+    }
+    else
+    {
+        SetPlateauSens(0);   // Babord
+        DC = -lastCommand;           // Valeur positive
+    }
+	
+    SetPlateau(DC);
+}
+
+
+/*
+void Plateau_ReceiveAndUpdate(void){
+    int8_t commande = lastCommand;
+    float DC;
+
+    if (commande >= 0){
+        // Tribord ? PB5 = 1
+        GPIOB->ODR |= (1 << 5);
+        DC = commande;
+    }
+    else {
+        // Babord ? PB5 = 0
+        GPIOB->ODR &= ~(1 << 5);
+        DC = -commande;
     }
 
-    return lastCmd;
-}
+    SetPlateau(DC);
+}*/
 
 
-void Send_Telemetry(void)
+void USART3_IRQHandler(void)
 {
-    float Vbat = GetBatteryVoltage();
-    int AngleVent = GirouetteGetAngle();
-
-    char msg[128];
-    sprintf(msg,
-            "a=%3d  Vbat=%.1fV\n",
-            AngleVent, Vbat);
-
-    USART2_SendString(msg);
+    // RXNE = un octet est arrivé ?
+    if (USART3->SR & USART_SR_RXNE)
+    {
+        lastCommand = (int8_t)USART3->DR;  // Lire efface RXNE
+    }
 }
-
-
-void TIM3_Message_Init(void)
-{
-    MyTimer_Base_Init(TIM3, 30000, 7200-1);
-    MyTimer_ActiveIT(TIM3, 2, Send_Telemetry);
-    MyTimer_Base_Start(TIM3);
-}
-
 
 int main(void)
 {
 
-    Alimentation_Init();
     Girouette_Init();
     MyServoInit();
     InitPlateau();
+    USART3_Init_RX_Interrupt();
+	ADC1_Init_PA0_Interrupt();
+
 
     // Initialisation de la télécommande (config USART2, etc.)
-    Telecommande_Init();
-
-
+    //Telecommande_Init();
 
     //TIM3_Message_Init();  // messages toutes les 3 secondes
 
-    USART2_SendString("Systeme Voilier 2.0 - READY\n");
 
     while(1)
     {
@@ -108,32 +128,12 @@ int main(void)
         AngleVent = GirouetteGetAngle();
         float DC = alpha_to_DC(AngleVent);
         SetDC(DC);
+				
+				//SetPlateau(100);
+				SetPlateauCommand();
+			CheckBatteryAndSend();
+			   ADC1->CR2 |= ADC_CR2_ADON;   // Relance une conversion
 
-        // --- Lecture de la consigne plateau via télécommande ---
-        Telecommande_GetDirectionVitesse(&sens, &vitesse);
-
-        // Sécurité : clamp de la vitesse 0..100
-        if (vitesse < 0) vitesse = 0;
-        if (vitesse > 100) vitesse = 100;
-
-        // Gestion sens + vitesse
-        if (sens < 0)
-        {
-            // Bâbord : par ex. PB7 à 0
-            ResetBroche(GPIOB, 7);
-            SetPlateau((float)vitesse);   // PWM proportionnelle
-        }
-        else if (sens > 0)
-        {
-            // Tribord : par ex. PB7 à 1
-            SetBroche(GPIOB, 7);
-            SetPlateau((float)vitesse);
-        }
-        else
-        {
-            // Stop
-            SetPlateau(0.0f);
-        }
     }
 }
 

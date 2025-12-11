@@ -14,4 +14,8 @@ void USART2_SendChar(char c);
 
 void USART2_SendString(const char *s);
 
+void USART1_SendChar(char c) ;
+
+void USART1_SendString(const char *s) ;
+
 #endif

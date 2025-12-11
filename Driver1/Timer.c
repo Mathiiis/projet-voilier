@@ -215,7 +215,7 @@ void MyTimer_PWM_Init(GPIO_TypeDef* GPIOx, uint8_t Pin,
 void MyTimer_PWM_SetDutyCycle(TIM_TypeDef* TIMx, uint8_t Channel, float DutyCycle)
 {
     // DutyCycle : 0.0 ? 1.0
-    unsigned short ccr = (unsigned short)(TIMx->ARR * DutyCycle);
+    unsigned short ccr = (unsigned short)(TIMx->ARR * (DutyCycle/100));
 
     switch(Channel)
     {

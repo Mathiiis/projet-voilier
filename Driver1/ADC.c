@@ -40,7 +40,7 @@ void MyADC1_Config_PA0(void)
 }
 
 	
-	
+	/*
 void ADC1_2_IRQHandler(void)
 {
     // Vérifie si le flag EOC (End Of Conversion) est levé
@@ -53,7 +53,7 @@ void ADC1_2_IRQHandler(void)
         // ? Ne pas le remettre à 0 manuellement !
     }
 	
-}
+}*/
 
 
 	/*
